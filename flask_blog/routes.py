@@ -1,9 +1,9 @@
-from flask import render_template, flash, redirect, url_for
-from flask_login import login_user, current_user, logout_user
+from flask import render_template, flash, redirect, url_for, request
+from flask_login import login_user, current_user, logout_user, login_required
 
 from flask_blog import app, db, bcrypt
 from flask_blog.forms import RegistrationForm, LoginForm
-from flask_blog.models import User, Post
+from flask_blog.models import User  # , Post
 
 posts = [
     {
@@ -22,9 +22,9 @@ posts = [
 
 
 @app.route("/")
-@app.route("/home")
+@app.route("/index")
 def index():
-    return render_template('home.html', posts=posts)
+    return render_template('index.html', posts=posts)
 
 
 @app.route("/about")
@@ -64,10 +64,16 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        if user and bcrypt.check_password_hash(user.password, form.password.data):
+        if user and bcrypt.check_password_hash(
+            user.password, form.password.data
+        ):
             login_user(user, remember=form.remember.data)
+            next_page = request.args.get('next')
             flash(f'You have been logged in!', 'success')
-            return redirect(url_for('index'))
+            return (
+                redirect(next_page) if next_page
+                else redirect(url_for('index'))
+            )
         else:
             flash(
                 'Login Unsucessful. Please check email and password',
@@ -80,3 +86,9 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
+
+@app.route("/account")
+@login_required
+def account():
+    return render_template('account.html', title='Account')
