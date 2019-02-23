@@ -1,7 +1,7 @@
 flake8==3.7.6
 Flask==1.0.2
 Flask-WTF==0.14.2
-flask-sqlalchemy=2.3.2
+flask-sqlalchemy==2.3.2
 Flask-Bcrypt==0.7.1
 Flask-Login==0.4.1
 ipython==7.3.0
