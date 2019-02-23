@@ -28,7 +28,7 @@ class User(db.Model, UserMixin):
     image_file = db.Column(
         db.String(20),
         nullable=False,
-        default='default.png'
+        default='default.jpg'
     )
     password = db.Column(
         db.String(60),

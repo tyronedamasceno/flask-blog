@@ -91,3 +91,7 @@ celerybeat-schedule.db
 # CSV files
 *.csv
 
+# Image files
+*.jpg
+*.jpeg
+*.png
