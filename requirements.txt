@@ -5,4 +5,4 @@ flask-sqlalchemy=2.3.2
 Flask-Bcrypt==0.7.1
 Flask-Login==0.4.1
 ipython==7.3.0
-
+Pillow==5.4.1
