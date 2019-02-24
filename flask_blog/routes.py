@@ -7,7 +7,9 @@ from flask import render_template, flash, redirect, url_for, request
 from flask_login import login_user, current_user, logout_user, login_required
 
 from flask_blog import app, db, bcrypt
-from flask_blog.forms import RegistrationForm, LoginForm, UpdateAccountForm
+from flask_blog.forms import (
+    RegistrationForm, LoginForm, UpdateAccountForm, PostForm
+)
 from flask_blog.models import User  # , Post
 
 posts = [
@@ -130,3 +132,14 @@ def account():
     return render_template(
         'account.html', title='Account', img_file=img_file, form=form
     )
+
+
+@app.route("/post/new", methods=['GET', 'POST'])
+@login_required
+def new_post():
+    form = PostForm()
+
+    if form.validate_on_submit():
+        flash('Your post has been created', 'success')
+        return redirect(url_for('index'))
+    return render_template('create_post.html', title='New Post', form=form)
