@@ -10,27 +10,13 @@ from flask_blog import app, db, bcrypt
 from flask_blog.forms import (
     RegistrationForm, LoginForm, UpdateAccountForm, PostForm
 )
-from flask_blog.models import User  # , Post
-
-posts = [
-    {
-        'author': 'Corey Schafer',
-        'title': 'Blog Post 1',
-        'content': 'First post content',
-        'date_posted': 'April 20, 2018'
-    },
-    {
-        'author': 'Jane Doe',
-        'title': 'Blog Post 2',
-        'content': 'Second post content',
-        'date_posted': 'April 21, 2018'
-    }
-]
+from flask_blog.models import User, Post
 
 
 @app.route("/")
 @app.route("/index")
 def index():
+    posts = Post.query.all()
     return render_template('index.html', posts=posts)
 
 
@@ -138,8 +124,14 @@ def account():
 @login_required
 def new_post():
     form = PostForm()
-
     if form.validate_on_submit():
+        post = Post(
+            title=form.title.data,
+            content=form.content.data,
+            author=current_user
+        )
+        db.session.add(post)
+        db.session.commit()
         flash('Your post has been created', 'success')
         return redirect(url_for('index'))
     return render_template('create_post.html', title='New Post', form=form)
