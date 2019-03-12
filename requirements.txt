@@ -1,3 +1,4 @@
+Faker==1.0.4
 flake8==3.7.6
 Flask-Bcrypt==0.7.1
 Flask-Login==0.4.1
