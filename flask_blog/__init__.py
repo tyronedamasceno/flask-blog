@@ -16,7 +16,7 @@ db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 
 login_manager = LoginManager(app)
-login_manager.login_view = 'login'
+login_manager.login_view = 'users.login'
 login_manager.login_message_category = 'info'
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -29,4 +29,10 @@ app.config['MAIL_PASSWORD'] = os.environ.get('EMAIL_PASSWORD')
 mail = Mail(app)
 
 # import after flask app iniatilization for avoid circular imports
-from flask_blog import routes
+from flask_blog.users.routes import users as users_bp
+from flask_blog.posts.routes import posts as posts_bp
+from flask_blog.main.routes import main as main_bp
+
+app.register_blueprint(users_bp)
+app.register_blueprint(posts_bp)
+app.register_blueprint(main_bp)
